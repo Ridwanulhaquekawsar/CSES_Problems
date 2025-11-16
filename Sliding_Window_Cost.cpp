@@ -84,5 +84,60 @@ int main() {
 }
 */
 
+• Additional Aproach: 👇 🧑‍💻
+    
+void solve()
+{
+    ll n, k;
+    cin >> n >> k;
+
+    vector<int> a(n);
+    for (ll i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
+    pbds<pair<ll, ll>> p;
+
+    ll l = 0, r = 0;
+    ll ans = 0;
+    ll old_mid_val = 0;
+    ll new_mid_val = 0;
+    bool first_window = true;
+    while (r < n)
+    {
+        p.insert({a[r], r});
+
+        // if it is first window
+        if (r - l + 1 == k)
+        {
+            new_mid_val = p.find_by_order((k - 1) / 2)->first;
+            if (first_window)
+            {
+                for (auto [val, idx] : p)
+                {
+                    ans += abs(new_mid_val - val);
+                }
+                cout << ans << " ";
+                first_window = false;
+            }
+            else
+            {
+                p.erase({a[l - 1], l - 1});
+                new_mid_val = p.find_by_order((k - 1) / 2)->first;
+                ans -= abs(old_mid_val - a[l - 1]);
+                ans += abs(new_mid_val - a[r]);
+
+                if (k % 2 == 0)
+                    ans += (old_mid_val - new_mid_val);
+                cout << ans << " ";
+            }
+            old_mid_val = new_mid_val;
+            l++;
+        }
+        r++;
+    }
+}
+
+
 
     
